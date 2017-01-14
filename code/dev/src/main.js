@@ -1,5 +1,10 @@
+/*******************************
+ * [_main.js]
+ * The core markdown-reader js file.
+ ******************************/
+
 /**
- * Dependencies
+ * { Dependencies }
  */
 	// Styling
 	import './style.scss';
@@ -11,15 +16,16 @@
 	import marked from 'src/helpers/vendor/marked.js';
 
 /**
- * Variables
+ * { Variables }
  */
 //const baseUrl = '/~nagydani/md/';
 const baseUrl = './repository/md/';
 
 /**
+ * { catch a fragmentRequest }
  * On change URL, try to render a document
  */
-const fragmentChange = function() {
+const fragmentRequest = function() {
 
 	if (window.location.hash) {
 		const swarmFragment = window.location.hash.substring(1);
@@ -39,8 +45,35 @@ const fragmentChange = function() {
 			/*eslint-enable */
 
 			xhr.onreadystatechange = function() {
+
 				if (xhr.readyState === 4) {
-					// Check if it exists and present error if file does not exist
+
+					/**
+					 * Verify filetype in the URL to catch incorrect routes
+					 * Also check for illegal characters
+					 */
+
+					const urlVerification = support.verify.url(swarmFragment),
+						validURL = urlVerification.validity,
+						validityError = urlVerification.error;
+
+					// Render an error
+					if (!validURL) {
+						// Clear previous content
+						support.render.clearContent();
+
+						// Render an error
+						document.getElementById('app__error').innerHTML =
+						marked('# Oops! \n\n' + validityError);
+
+						document.title = 'Document error!';
+
+						return;
+					}
+
+					/**
+					  * Check if a document was grabbed or not, handle errors
+					  */
 					if (xhr.status == '404') {
 							// Clear previous content
 							support.render.clearContent();
@@ -74,7 +107,7 @@ const fragmentChange = function() {
 };
 
 // Set the fragmentChange function to run each time the window on hash event fires
-window.onhashchange = fragmentChange;
+window.onhashchange = fragmentRequest;
 
 // Run the function
-fragmentChange();
+fragmentRequest();

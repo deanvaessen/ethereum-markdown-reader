@@ -1,0 +1,7 @@
+Bugs:
+1): http://localhost:8080/#book2 renders "<!doctype html>"
+Fixed: URL verification implemented
+
+Todo:
+1): Check file size
+2): Also generate non compressed JS file.

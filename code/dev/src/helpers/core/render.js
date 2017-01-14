@@ -1,6 +1,6 @@
 /*******************************
  * [_render.js]
- * Define the helper function for rendering here
+ * Helper function for rendering
  ******************************/
 
 /**
@@ -17,8 +17,10 @@
 	 * Support helpers for adding content
 	*/
 	const add = {
+
 		// Function to change page title to level 1 heading
 		renderDocumentTitle : function (renderer, initialTitle) {
+
 			// Set initial title to construct a check so that not each heading overwrites the document title
 			let documentTitle = initialTitle;
 

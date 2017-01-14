@@ -7,6 +7,7 @@
 * { Dependencies }
 */
 import renderHelpers from './render';
+import verificationHelpers from './verify';
 
 /**
 * { Function }
@@ -14,6 +15,7 @@ import renderHelpers from './render';
 const index = (function () {
 
 			/**
+			* { Render }
 			* Support helpers for rendering
 			*/
 			const render = {
@@ -25,8 +27,19 @@ const index = (function () {
 				}
 			};
 
+			/**
+			* { Verify }
+			* Support helpers for verification
+			*/
+			const verify = {
+				url : function (requestURL){
+					return verificationHelpers.url(requestURL);
+				}
+			};
+
 			return {
-				render : render
+				render : render,
+				verify : verify
 			};
 })();
 

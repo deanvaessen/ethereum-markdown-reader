@@ -1,3 +1,4 @@
 12/01/2017 : 0.0.0 - Project base stable
 12/01/2017 : 0.0.1 - Markdown test
-14/01/2017 : 0.0.2 - Page title updating, browsing to other fragments, error handling
+14/01/2017 : 0.0.2 - Page title updating, browsing to other fragments, error handling. Seperated out support functions.
+14/01/2017 : 0.0.3 - Added file fragment URL verification (single, multiple dots, illegal characters, file extention)
