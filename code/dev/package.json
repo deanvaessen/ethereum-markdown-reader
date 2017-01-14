@@ -1,9 +1,8 @@
 {
   "name": "ethereum-markdown-reader",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Development environment for ethereum-markdown-reader",
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "Dean Vaessen <hello@deanvaessen.com>",
   "license": "MIT",
   "repository": {
@@ -39,6 +38,7 @@
     "eslint-plugin-html": "^1.5.1",
     "eslint-plugin-import": "^1.10.2",
     "exports-loader": "^0.6.3",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.22.0",
@@ -47,9 +47,10 @@
     "postcss-loader": "^0.9.1",
     "prerender-spa-plugin": "^1.1.0",
     "require-dir": "^0.3.0",
-    "sass-loader": "^4.0.0",
+    "sass-loader": "^4.1.1",
     "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.1",
+    "unminified-webpack-plugin": "^1.2.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.1",
     "webpack-cleanup-plugin": "^0.2.0",

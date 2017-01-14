@@ -1,17 +1,17 @@
-@import "styles/variables";
+/*******************************
+ * [_style.scss]
+ * The core scss style sheet
+ ******************************/
+
+/**
+ * { Dependencies }
+ */
+//@import "styles/variables";
 
 // npm depencies
-@import "~bootstrap/scss/bootstrap";
-@import "~font-awesome/scss/font-awesome";
+//@import "~bootstrap/scss/bootstrap";
+//@import "~font-awesome/scss/font-awesome";
 
 // Project specific
 @import "styles/global";
-
-body {
-	background: white;
-}
-
-.errorText {
-	color: red;
-	text-align: center;
-}
+@import "styles/components";

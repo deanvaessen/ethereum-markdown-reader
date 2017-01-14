@@ -6,6 +6,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = require('../package.json').config;
 var webpackBase = require('./webpack.base.js');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = merge(webpackBase, {
   devtool: '#eval-source-map',
@@ -34,6 +35,7 @@ module.exports = merge(webpackBase, {
 
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new ExtractTextPlugin("style.css")
   ]
 });

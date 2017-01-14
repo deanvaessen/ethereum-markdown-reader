@@ -6,6 +6,10 @@ var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 
 var webpackBase = require('./webpack.base.js');
 
+var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
+
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 module.exports = merge(webpackBase, {
   plugins: [
     new webpack.DefinePlugin({
@@ -27,5 +31,7 @@ module.exports = merge(webpackBase, {
         warnings: false
       }
     }),
+    new UnminifiedWebpackPlugin(),
+    new ExtractTextPlugin("style.css")
   ]
 });
