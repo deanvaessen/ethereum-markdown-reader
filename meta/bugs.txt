@@ -1,0 +1,1 @@
+1): http://localhost:8080/#book2 renders "<!doctype html>"

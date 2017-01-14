@@ -8,5 +8,10 @@
 @import "styles/global";
 
 body {
-	background: black;
+	background: white;
+}
+
+.errorText {
+	color: red;
+	text-align: center;
 }
