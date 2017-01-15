@@ -3,5 +3,5 @@ Bugs:
 Fixed: URL verification implemented
 
 Todo:
-1): Check file size
-2): Also generate non compressed JS file.
+1): Make the function/app something you need to initialise to run and add the possibility to add the prefix of the url when initiating the call to the function.
+Done: v0.0.5.

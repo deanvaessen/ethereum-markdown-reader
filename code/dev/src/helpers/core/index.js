@@ -6,8 +6,8 @@
 /**
 * { Dependencies }
 */
-import renderHelpers from './render';
-import verificationHelpers from './verify';
+import renderHelpers from './_render';
+import verificationHelpers from './_verify';
 
 /**
 * { Function }
