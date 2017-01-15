@@ -7,13 +7,18 @@
 /**
  * { Dependencies }
  */
+	// Styling
+	import './style.scss';
 
-import markdownReader from './markdownreader';
+	// The app
+	import markdownReader from './markdownreader';
+
+	console.log(markdownReader);
 
 /**
  * { Init }
  * Initiate the app with the location of the files (baseURL).
  */
 
-markdownReader.init('./repository/md/');
+//markdownReader.init('./repository/md/');
 

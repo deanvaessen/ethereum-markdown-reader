@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(41);
+	module.exports = __webpack_require__(37);
 
 
 /***/ },
@@ -70,7 +70,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(53)
+	var IObject = __webpack_require__(54)
 	  , defined = __webpack_require__(15);
 	module.exports = function(it){
 	  return IObject(defined(it));
@@ -353,7 +353,7 @@
 
 	var global    = __webpack_require__(1)
 	  , core      = __webpack_require__(14)
-	  , ctx       = __webpack_require__(50)
+	  , ctx       = __webpack_require__(51)
 	  , hide      = __webpack_require__(5)
 	  , PROTOTYPE = 'prototype';
 	
@@ -432,9 +432,9 @@
 	  , hide           = __webpack_require__(5)
 	  , has            = __webpack_require__(2)
 	  , Iterators      = __webpack_require__(17)
-	  , $iterCreate    = __webpack_require__(55)
+	  , $iterCreate    = __webpack_require__(56)
 	  , setToStringTag = __webpack_require__(20)
-	  , getPrototypeOf = __webpack_require__(62)
+	  , getPrototypeOf = __webpack_require__(63)
 	  , ITERATOR       = __webpack_require__(7)('iterator')
 	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
 	  , FF_ITERATOR    = '@@iterator'
@@ -502,7 +502,7 @@
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 	var anObject    = __webpack_require__(8)
-	  , dPs         = __webpack_require__(59)
+	  , dPs         = __webpack_require__(60)
 	  , enumBugKeys = __webpack_require__(16)
 	  , IE_PROTO    = __webpack_require__(21)('IE_PROTO')
 	  , Empty       = function(){ /* empty */ }
@@ -517,7 +517,7 @@
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(52).appendChild(iframe);
+	  __webpack_require__(53).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -567,7 +567,7 @@
 
 	var has          = __webpack_require__(2)
 	  , toIObject    = __webpack_require__(3)
-	  , arrayIndexOf = __webpack_require__(49)(false)
+	  , arrayIndexOf = __webpack_require__(50)(false)
 	  , IE_PROTO     = __webpack_require__(21)('IE_PROTO');
 	
 	module.exports = function(object, names){
@@ -595,62 +595,35 @@
 
 	'use strict';
 	
-	var _render = __webpack_require__(38);
+	__webpack_require__(75);
 	
-	var _render2 = _interopRequireDefault(_render);
+	var _markdownreader = __webpack_require__(42);
 	
-	var _verify = __webpack_require__(39);
-	
-	var _verify2 = _interopRequireDefault(_verify);
+	var _markdownreader2 = _interopRequireDefault(_markdownreader);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/**
-	* { Function }
-	*/
 	/*******************************
-	 * [_index.js]
-	 * index file for the helpers
+	 * [entry.js]
+	 * The app entry file used for testing and development.
+	 * This file demonstrates how to call and init the app.
 	 ******************************/
 	
 	/**
-	* { Dependencies }
-	*/
-	var index = function () {
-	
-		/**
-	 * { Render }
-	 * Support helpers for rendering
+	 * { Dependencies }
 	 */
-		var render = {
-			renderDocumentTitle: function renderDocumentTitle(renderer, initialTitle) {
-				return _render2.default.add.renderDocumentTitle(renderer, initialTitle);
-			},
-			clearContent: function clearContent() {
-				return _render2.default.remove.clearContent();
-			}
-		};
-	
-		/**
-	 * { Verify }
-	 * Support helpers for verification
-	 */
-		var verify = {
-			url: function url(requestURL) {
-				return _verify2.default.url(requestURL);
-			}
-		};
-	
-		return {
-			render: render,
-			verify: verify
-		};
-	}();
+	// Styling
+	console.log(_markdownreader2.default);
 	
 	/**
-	 * Export
+	 * { Init }
+	 * Initiate the app with the location of the files (baseURL).
 	 */
-	module.exports = index;
+	
+	//markdownReader.init('./repository/md/');
+	
+	
+	// The app
 
 /***/ },
 /* 38 */
@@ -796,9 +769,72 @@
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var _render = __webpack_require__(38);
+	
+	var _render2 = _interopRequireDefault(_render);
+	
+	var _verify = __webpack_require__(39);
+	
+	var _verify2 = _interopRequireDefault(_verify);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	* { Function }
+	*/
+	/*******************************
+	 * [index.js]
+	 * Index file for the app's helpers
+	 ******************************/
+	
+	/**
+	* { Dependencies }
+	*/
+	var index = function () {
+	
+		/**
+	 * { Render }
+	 * Support helpers for rendering
+	 */
+		var render = {
+			renderDocumentTitle: function renderDocumentTitle(renderer, initialTitle) {
+				return _render2.default.add.renderDocumentTitle(renderer, initialTitle);
+			},
+			clearContent: function clearContent() {
+				return _render2.default.remove.clearContent();
+			}
+		};
+	
+		/**
+	 * { Verify }
+	 * Support helpers for verification
+	 */
+		var verify = {
+			url: function url(requestURL) {
+				return _verify2.default.url(requestURL);
+			}
+		};
+	
+		return {
+			render: render,
+			verify: verify
+		};
+	}();
+	
+	/**
+	 * Export
+	 */
+	module.exports = index;
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
-	var _typeof2 = __webpack_require__(44);
+	var _typeof2 = __webpack_require__(45);
 	
 	var _typeof3 = _interopRequireDefault(_typeof2);
 	
@@ -1987,139 +2023,156 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(74);
-	
-	var _index = __webpack_require__(37);
+	var _index = __webpack_require__(40);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _marked = __webpack_require__(40);
+	var _marked = __webpack_require__(41);
 	
 	var _marked2 = _interopRequireDefault(_marked);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/**
-	 * { Variables }
-	 */
-	//const baseUrl = '/~nagydani/md/';
-	
-	
-	// Support functions
-	var baseUrl = './repository/md/';
-	
-	/**
-	 * { catch a fragmentRequest }
-	 * On change URL, try to render a document
-	 */
-	
-	
-	// Vendor functions
+	* { App }
+	*/
 	/*******************************
-	 * [_main.js]
+	 * [markdownreader.js]
 	 * The core markdown-reader js file.
 	 ******************************/
 	
 	/**
-	 * { Dependencies }
+	* { Dependencies }
+	*/
+	// Support functions
+	var index = function () {
+	
+		/**
+	 * { Init }
+	 * Init the app
 	 */
-	// Styling
-	var fragmentRequest = function fragmentRequest() {
+		var init = function (requestedBaseURL) {
 	
-		if (window.location.hash) {
-			(function () {
-				var swarmFragment = window.location.hash.substring(1);
+			/**
+	  * { Variables }
+	  */
+			var baseURL = void 0;
 	
-				/**
-	    * Set up the markdown render options
-	    */
-				var renderer = new _marked2.default.Renderer();
+			// if no baseURL was given, look in a fallback directory
+			if (!requestedBaseURL) {
+				baseURL = './repository/md/';
+			} else {
+				baseURL = requestedBaseURL;
+			}
 	
-				/**
-	    * Grab a document and render it to the container
-	    */
-				var swarmDocumentPath = baseUrl + swarmFragment;
+			/**
+	   * { catch a fragmentRequest }
+	   * On change URL, try to render a document
+	   */
+			var fragmentRequest = function fragmentRequest() {
 	
-				/*eslint-disable */
-				var xhr = new XMLHttpRequest();
-				/*eslint-enable */
-	
-				xhr.onreadystatechange = function () {
-	
-					if (xhr.readyState === 4) {
+				if (window.location.hash) {
+					(function () {
+						var swarmFragment = window.location.hash.substring(1);
 	
 						/**
-	      * Verify filetype in the URL to catch incorrect routes
-	      * Also check for illegal characters
+	      * Set up the markdown render options
 	      */
-	
-						var urlVerification = _index2.default.verify.url(swarmFragment),
-						    validURL = urlVerification.validity,
-						    validityError = urlVerification.error;
-	
-						// Render an error
-						if (!validURL) {
-							// Clear previous content
-							_index2.default.render.clearContent();
-	
-							// Render an error
-							document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + validityError);
-	
-							document.title = 'Document error!';
-	
-							return;
-						}
+						var renderer = new _marked2.default.Renderer();
 	
 						/**
-	       * Check if a document was grabbed or not, handle errors
-	       */
-						if (xhr.status == '404') {
-							// Clear previous content
-							_index2.default.render.clearContent();
+	      * Grab a document and render it to the container
+	      */
+						var swarmDocumentPath = baseURL + swarmFragment;
 	
-							// Render an error
-							document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\nWe could not find this file.');
+						/*eslint-disable */
+						var xhr = new XMLHttpRequest();
+						/*eslint-enable */
 	
-							document.title = 'File not found!';
-						} else {
-							// Clear previous content
-							_index2.default.render.clearContent();
+						xhr.onreadystatechange = function () {
 	
-							// Render document title with an initial title and search for new title
-							_index2.default.render.renderDocumentTitle(renderer, 'unnamed');
+							if (xhr.readyState === 4) {
 	
-							// Render the document
-							document.getElementById('app__markdownContent').innerHTML = (0, _marked2.default)(xhr.responseText, { renderer: renderer });
-						}
-					}
-				};
+								/**
+	        * Verify filetype in the URL to catch incorrect routes
+	        * Also check for illegal characters
+	        */
 	
-				// Send request
-				xhr.open('GET', swarmDocumentPath, false);
-				xhr.send();
-			})();
-		} else {
-			// Leave document empty
-			return;
-		}
-	};
+								var urlVerification = _index2.default.verify.url(swarmFragment),
+								    validURL = urlVerification.validity,
+								    validityError = urlVerification.error;
 	
-	// Set the fragmentChange function to run each time the window on hash event fires
-	window.onhashchange = fragmentRequest;
+								// Render an error
+								if (!validURL) {
+									// Clear previous content
+									_index2.default.render.clearContent();
 	
-	// Run the function
-	fragmentRequest();
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(45), __esModule: true };
+									// Render an error
+									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + validityError);
+	
+									document.title = 'Document error!';
+	
+									return;
+								}
+	
+								/**
+	         * Check if a document was grabbed or not, handle errors
+	         */
+								if (xhr.status == '404') {
+									// Clear previous content
+									_index2.default.render.clearContent();
+	
+									// Render an error
+									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\nWe could not find this file.');
+	
+									document.title = 'File not found!';
+								} else {
+									// Clear previous content
+									_index2.default.render.clearContent();
+	
+									// Render document title with an initial title and search for new title
+									_index2.default.render.renderDocumentTitle(renderer, 'unnamed');
+	
+									// Render the document
+									document.getElementById('app__markdownContent').innerHTML = (0, _marked2.default)(xhr.responseText, { renderer: renderer });
+								}
+							}
+						};
+	
+						// Send request
+						xhr.open('GET', swarmDocumentPath, false);
+						xhr.send();
+					})();
+				} else {
+					// Leave document empty
+					return;
+				}
+			};
+	
+			// Set the fragmentChange function to run each time the window on hash event fires
+			window.onhashchange = fragmentRequest;
+	
+			// Run the function
+			fragmentRequest();
+		}();
+	
+		return {
+			init: init
+		};
+	}();
+	
+	/**
+	 * Export
+	 */
+	
+	
+	// Vendor functions
+	module.exports = index;
 
 /***/ },
 /* 43 */
@@ -2131,15 +2184,21 @@
 /* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = { "default": __webpack_require__(47), __esModule: true };
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _iterator = __webpack_require__(43);
+	var _iterator = __webpack_require__(44);
 	
 	var _iterator2 = _interopRequireDefault(_iterator);
 	
-	var _symbol = __webpack_require__(42);
+	var _symbol = __webpack_require__(43);
 	
 	var _symbol2 = _interopRequireDefault(_symbol);
 	
@@ -2154,25 +2213,25 @@
 	};
 
 /***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(70);
-	__webpack_require__(68);
-	__webpack_require__(71);
-	__webpack_require__(72);
-	module.exports = __webpack_require__(14).Symbol;
-
-/***/ },
 /* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(71);
 	__webpack_require__(69);
+	__webpack_require__(72);
 	__webpack_require__(73);
-	module.exports = __webpack_require__(26).f('iterator');
+	module.exports = __webpack_require__(14).Symbol;
 
 /***/ },
 /* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(70);
+	__webpack_require__(74);
+	module.exports = __webpack_require__(26).f('iterator');
+
+/***/ },
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -2181,20 +2240,20 @@
 	};
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = function(){ /* empty */ };
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
 	var toIObject = __webpack_require__(3)
-	  , toLength  = __webpack_require__(65)
-	  , toIndex   = __webpack_require__(64);
+	  , toLength  = __webpack_require__(66)
+	  , toIndex   = __webpack_require__(65);
 	module.exports = function(IS_INCLUDES){
 	  return function($this, el, fromIndex){
 	    var O      = toIObject($this)
@@ -2213,11 +2272,11 @@
 	};
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(47);
+	var aFunction = __webpack_require__(48);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -2238,7 +2297,7 @@
 	};
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// all enumerable object keys, includes symbols
@@ -2258,13 +2317,13 @@
 	};
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1).document && document.documentElement;
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
@@ -2274,7 +2333,7 @@
 	};
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.2.2 IsArray(argument)
@@ -2284,7 +2343,7 @@
 	};
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2302,7 +2361,7 @@
 	};
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports) {
 
 	module.exports = function(done, value){
@@ -2310,7 +2369,7 @@
 	};
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getKeys   = __webpack_require__(11)
@@ -2325,7 +2384,7 @@
 	};
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var META     = __webpack_require__(13)('meta')
@@ -2383,7 +2442,7 @@
 	};
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var dP       = __webpack_require__(6)
@@ -2401,7 +2460,7 @@
 	};
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pIE            = __webpack_require__(19)
@@ -2422,7 +2481,7 @@
 	};
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
@@ -2447,12 +2506,12 @@
 
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 	var has         = __webpack_require__(2)
-	  , toObject    = __webpack_require__(66)
+	  , toObject    = __webpack_require__(67)
 	  , IE_PROTO    = __webpack_require__(21)('IE_PROTO')
 	  , ObjectProto = Object.prototype;
 	
@@ -2465,7 +2524,7 @@
 	};
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var toInteger = __webpack_require__(23)
@@ -2487,7 +2546,7 @@
 	};
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var toInteger = __webpack_require__(23)
@@ -2499,7 +2558,7 @@
 	};
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
@@ -2510,7 +2569,7 @@
 	};
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
@@ -2520,12 +2579,12 @@
 	};
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(48)
-	  , step             = __webpack_require__(56)
+	var addToUnscopables = __webpack_require__(49)
+	  , step             = __webpack_require__(57)
 	  , Iterators        = __webpack_require__(17)
 	  , toIObject        = __webpack_require__(3);
 	
@@ -2559,17 +2618,17 @@
 	addToUnscopables('entries');
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $at  = __webpack_require__(63)(true);
+	var $at  = __webpack_require__(64)(true);
 	
 	// 21.1.3.27 String.prototype[@@iterator]()
 	__webpack_require__(31)(String, 'String', function(iterated){
@@ -2587,7 +2646,7 @@
 	});
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2597,7 +2656,7 @@
 	  , DESCRIPTORS    = __webpack_require__(4)
 	  , $export        = __webpack_require__(29)
 	  , redefine       = __webpack_require__(36)
-	  , META           = __webpack_require__(58).KEY
+	  , META           = __webpack_require__(59).KEY
 	  , $fails         = __webpack_require__(9)
 	  , shared         = __webpack_require__(22)
 	  , setToStringTag = __webpack_require__(20)
@@ -2605,16 +2664,16 @@
 	  , wks            = __webpack_require__(7)
 	  , wksExt         = __webpack_require__(26)
 	  , wksDefine      = __webpack_require__(25)
-	  , keyOf          = __webpack_require__(57)
-	  , enumKeys       = __webpack_require__(51)
-	  , isArray        = __webpack_require__(54)
+	  , keyOf          = __webpack_require__(58)
+	  , enumKeys       = __webpack_require__(52)
+	  , isArray        = __webpack_require__(55)
 	  , anObject       = __webpack_require__(8)
 	  , toIObject      = __webpack_require__(3)
 	  , toPrimitive    = __webpack_require__(24)
 	  , createDesc     = __webpack_require__(12)
 	  , _create        = __webpack_require__(32)
-	  , gOPNExt        = __webpack_require__(61)
-	  , $GOPD          = __webpack_require__(60)
+	  , gOPNExt        = __webpack_require__(62)
+	  , $GOPD          = __webpack_require__(61)
 	  , $DP            = __webpack_require__(6)
 	  , $keys          = __webpack_require__(11)
 	  , gOPD           = $GOPD.f
@@ -2827,22 +2886,22 @@
 	setToStringTag(global.JSON, 'JSON', true);
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(25)('asyncIterator');
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(25)('observable');
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(67);
+	__webpack_require__(68);
 	var global        = __webpack_require__(1)
 	  , hide          = __webpack_require__(5)
 	  , Iterators     = __webpack_require__(17)
@@ -2857,7 +2916,7 @@
 	}
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

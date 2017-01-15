@@ -1,6 +1,6 @@
 {
   "name": "ethereum-markdown-reader",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Development environment for ethereum-markdown-reader",
   "keywords": [],
   "author": "Dean Vaessen <hello@deanvaessen.com>",
@@ -14,7 +14,11 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config webpack/development.js --colors --history-api-fallback --inline --progress",
-    "build": "webpack --config webpack/production.js -p --progress",
+    "build": "npm run build-dev && npm run prepare-build && npm run build-build && npm run post-build",
+    "build-dev": "webpack --config webpack/production.js -p --progress",
+    "prepare-build": "node prebuildglue.js --exec babel-node --presets es2015,stage-2",
+    "post-build": "node postbuildglue.js --exec babel-node --presets es2015,stage-2",
+    "build-build": "cd ./../build && npm run build",
     "lint:js": "./node_modules/.bin/eslint src; exit 0;"
   },
   "dependencies": {
@@ -23,6 +27,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.3.7",
+    "babel-cli": "^6.18.0",
     "babel-core": "^6.10.4",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.4",
@@ -40,9 +45,11 @@
     "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
+    "fs": "0.0.1-security",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.22.0",
     "imports-loader": "^0.6.5",
+    "ncp": "^2.0.0",
     "node-sass": "^3.8.0",
     "postcss-loader": "^0.9.1",
     "prerender-spa-plugin": "^1.1.0",
