@@ -11,9 +11,9 @@
 	import './style.scss';
 
 	// The app
+	/*eslint-disable */
 	import markdownReader from './markdownreader';
-
-	console.log(markdownReader);
+	/*eslint-enable */
 
 /**
  * { Init }

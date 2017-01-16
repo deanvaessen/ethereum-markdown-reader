@@ -23,7 +23,8 @@ console.log('/dev/postbuildglue.js starting....')
 	ncp.limit = 16;
 
 	fs.createReadStream('./build/style.css').pipe(fs.createWriteStream('./../build/dist/style.css'));
-	fs.createReadStream('./src/index_prodtest.html').pipe(fs.createWriteStream('./../build/dist/index.html'));
+	fs.createReadStream('./src/index_prodindex.html').pipe(fs.createWriteStream('./../build/dist/index.html'));
+	fs.createReadStream('./readerConfiguration.json').pipe(fs.createWriteStream('./../build/dist/readerConfiguration.json'));
 
 	ncp('./repository/', './../build/dist/repository', function (err) {
 		if (err) {

@@ -6,6 +6,7 @@
 /**
 * { Dependencies }
 */
+import initHelpers from './_init';
 import renderHelpers from './_render';
 import verificationHelpers from './_verify';
 
@@ -15,6 +16,16 @@ import verificationHelpers from './_verify';
 const index = (function () {
 
 			/**
+			 * { Init }
+			 * Support helpers to run on init
+			 */
+			 const init = {
+			 	conf : function (){
+			 		return initHelpers.conf();
+			 	}
+			 };
+
+			/**
 			* { Render }
 			* Support helpers for rendering
 			*/
@@ -22,6 +33,7 @@ const index = (function () {
 				renderDocumentTitle : function (renderer, initialTitle){
 					return renderHelpers.add.renderDocumentTitle(renderer, initialTitle);
 				},
+
 				clearContent : function (){
 					return renderHelpers.remove.clearContent();
 				}
@@ -34,10 +46,15 @@ const index = (function () {
 			const verify = {
 				url : function (requestURL){
 					return verificationHelpers.url(requestURL);
+				},
+
+				contentType : function (requestContentType){
+					return verificationHelpers.contentType(requestContentType);
 				}
 			};
 
 			return {
+				init : init,
 				render : render,
 				verify : verify
 			};

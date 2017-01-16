@@ -44,6 +44,8 @@
 		clearContent : function () {
 			document.getElementById('app__markdownContent').innerHTML = '';
 			document.getElementById('app__error').innerHTML = '';
+
+			document.getElementById('app__error').className = 'errorText';
 		}
 	};
 

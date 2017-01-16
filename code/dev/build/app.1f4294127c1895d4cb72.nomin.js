@@ -70,7 +70,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(54)
+	var IObject = __webpack_require__(55)
 	  , defined = __webpack_require__(15);
 	module.exports = function(it){
 	  return IObject(defined(it));
@@ -353,7 +353,7 @@
 
 	var global    = __webpack_require__(1)
 	  , core      = __webpack_require__(14)
-	  , ctx       = __webpack_require__(51)
+	  , ctx       = __webpack_require__(52)
 	  , hide      = __webpack_require__(5)
 	  , PROTOTYPE = 'prototype';
 	
@@ -432,9 +432,9 @@
 	  , hide           = __webpack_require__(5)
 	  , has            = __webpack_require__(2)
 	  , Iterators      = __webpack_require__(17)
-	  , $iterCreate    = __webpack_require__(56)
+	  , $iterCreate    = __webpack_require__(57)
 	  , setToStringTag = __webpack_require__(20)
-	  , getPrototypeOf = __webpack_require__(63)
+	  , getPrototypeOf = __webpack_require__(64)
 	  , ITERATOR       = __webpack_require__(7)('iterator')
 	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
 	  , FF_ITERATOR    = '@@iterator'
@@ -502,7 +502,7 @@
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 	var anObject    = __webpack_require__(8)
-	  , dPs         = __webpack_require__(60)
+	  , dPs         = __webpack_require__(61)
 	  , enumBugKeys = __webpack_require__(16)
 	  , IE_PROTO    = __webpack_require__(21)('IE_PROTO')
 	  , Empty       = function(){ /* empty */ }
@@ -517,7 +517,7 @@
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(53).appendChild(iframe);
+	  __webpack_require__(54).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -567,7 +567,7 @@
 
 	var has          = __webpack_require__(2)
 	  , toIObject    = __webpack_require__(3)
-	  , arrayIndexOf = __webpack_require__(50)(false)
+	  , arrayIndexOf = __webpack_require__(51)(false)
 	  , IE_PROTO     = __webpack_require__(21)('IE_PROTO');
 	
 	module.exports = function(object, names){
@@ -595,38 +595,89 @@
 
 	'use strict';
 	
-	__webpack_require__(75);
+	__webpack_require__(76);
 	
-	var _markdownreader = __webpack_require__(42);
+	var _markdownreader = __webpack_require__(43);
 	
 	var _markdownreader2 = _interopRequireDefault(_markdownreader);
-	
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 38 */
+/***/ function(module, exports) {
+
+	'use strict';
 	
 	/*******************************
-	 * [entry.js]
-	 * The app entry file used for testing and development.
-	 * This file demonstrates how to call and init the app.
+	 * [_init.js]
+	 * Helper function to run on init
 	 ******************************/
 	
 	/**
 	 * { Dependencies }
 	 */
-	// Styling
-	console.log(_markdownreader2.default);
 	
 	/**
-	 * { Init }
-	 * Initiate the app with the location of the files (baseURL).
+	* { Function }
+	*/
+	var index = function () {
+	
+		/**
+	  * { Conf }
+	  * Some initial configuration
+	  * Look for a JSON configuration file
 	 */
+		var conf = function conf(fragmentURL) {
+			var configurationFilePath = './readerConfiguration.json';
 	
-	//markdownReader.init('./repository/md/');
+			var readerConfigurationObject = {
+				baseURL: 'unknown'
+			};
 	
+			/*eslint-disable */
+			var xhr = new XMLHttpRequest();
+			/*eslint-enable */
 	
-	// The app
+			xhr.onreadystatechange = function () {
+	
+				if (xhr.readyState === 4) {
+	
+					/**
+	      * Update readerConfigurationObject if we found the json file
+	      */
+					if (xhr.status == '404') {
+						// Do nothing
+					} else {
+						// Found the configuration file, so update it
+						var grabbedConfiguration = JSON.parse(xhr.responseText);
+	
+						if (grabbedConfiguration.configuration.baseURL) {
+							readerConfigurationObject.baseURL = grabbedConfiguration.configuration.baseURL;
+						}
+					}
+				}
+			};
+	
+			// Send request
+			xhr.open('GET', configurationFilePath, false);
+			xhr.send();
+	
+			return readerConfigurationObject;
+		};
+	
+		return {
+			conf: conf
+		};
+	}();
+	
+	/**
+	* Export
+	*/
+	module.exports = index;
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -677,6 +728,8 @@
 			clearContent: function clearContent() {
 				document.getElementById('app__markdownContent').innerHTML = '';
 				document.getElementById('app__error').innerHTML = '';
+	
+				document.getElementById('app__error').className = 'errorText';
 			}
 		};
 	
@@ -692,7 +745,7 @@
 	module.exports = index;
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -722,32 +775,32 @@
 			};
 	
 			// Verify the number of dots in the URL
-			var numberOfDotsInFragmentURL = (fragmentURL.match(/\./g) || []).length;
-	
-			if (numberOfDotsInFragmentURL < 1) {
-				urlVerification.error = 'No dot found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			} else if (numberOfDotsInFragmentURL > 1) {
-				urlVerification.error = 'Multiple dots found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
+			/*		const numberOfDotsInFragmentURL = (fragmentURL.match(/\./g) || []).length;
+	  
+	  		if (numberOfDotsInFragmentURL < 1) {
+	  			urlVerification.error = 'No dot found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		} else if (numberOfDotsInFragmentURL > 1) {
+	  			urlVerification.error = 'Multiple dots found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}*/
 	
 			// Verify a file extention of "md" has been given
-			if (fragmentURL.indexOf('.md') == -1) {
-				urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
-	
-			if (fragmentURL.charAt(fragmentURL.indexOf('.md') + 3) != '') {
-				urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
-	
+			/*		if (fragmentURL.indexOf('.md') == -1) {
+	  			urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}
+	  
+	  		if ((fragmentURL.charAt(fragmentURL.indexOf('.md') + 3) != '')){
+	  			urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}
+	  */
 			// Test for illegal characters
-			if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":,<>\?]/g.test(fragmentURL)) {
-				urlVerification.error = 'Illegal characters in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
+			/*		if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":,<>\?]/g.test(fragmentURL)) {
+	  			urlVerification.error = 'Illegal characters in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}*/
 	
 			// All cleared, return result
 			urlVerification.validity = true;
@@ -755,8 +808,30 @@
 			return urlVerification;
 		};
 	
+		/**
+	  * { contentType }
+	  * Verify contentType
+	 */
+		var contentType = function contentType(requestContentType) {
+			var contentTypeVerification = {
+				validity: false,
+				error: 'You should never be seeing this error, please inform us'
+			};
+	
+			// Test for HTML content types
+			if (requestContentType.indexOf('text/html') != -1) {
+				contentTypeVerification.error = 'Oops, you tried to load an HTML document';
+				return contentTypeVerification;
+			}
+	
+			// All cleared, return result
+			contentTypeVerification.validity = true;
+			return contentTypeVerification;
+		};
+	
 		return {
-			url: url
+			url: url,
+			contentType: contentType
 		};
 	}();
 	
@@ -766,16 +841,20 @@
 	module.exports = index;
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _render = __webpack_require__(38);
+	var _init = __webpack_require__(38);
+	
+	var _init2 = _interopRequireDefault(_init);
+	
+	var _render = __webpack_require__(39);
 	
 	var _render2 = _interopRequireDefault(_render);
 	
-	var _verify = __webpack_require__(39);
+	var _verify = __webpack_require__(40);
 	
 	var _verify2 = _interopRequireDefault(_verify);
 	
@@ -784,15 +863,17 @@
 	/**
 	* { Function }
 	*/
-	/*******************************
-	 * [index.js]
-	 * Index file for the app's helpers
-	 ******************************/
-	
-	/**
-	* { Dependencies }
-	*/
 	var index = function () {
+	
+		/**
+	  * { Init }
+	  * Support helpers to run on init
+	  */
+		var init = {
+			conf: function conf() {
+				return _init2.default.conf();
+			}
+		};
 	
 		/**
 	 * { Render }
@@ -802,6 +883,7 @@
 			renderDocumentTitle: function renderDocumentTitle(renderer, initialTitle) {
 				return _render2.default.add.renderDocumentTitle(renderer, initialTitle);
 			},
+	
 			clearContent: function clearContent() {
 				return _render2.default.remove.clearContent();
 			}
@@ -814,10 +896,15 @@
 		var verify = {
 			url: function url(requestURL) {
 				return _verify2.default.url(requestURL);
+			},
+	
+			contentType: function contentType(requestContentType) {
+				return _verify2.default.contentType(requestContentType);
 			}
 		};
 	
 		return {
+			init: init,
 			render: render,
 			verify: verify
 		};
@@ -826,15 +913,23 @@
 	/**
 	 * Export
 	 */
+	/*******************************
+	 * [index.js]
+	 * Index file for the app's helpers
+	 ******************************/
+	
+	/**
+	* { Dependencies }
+	*/
 	module.exports = index;
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
-	var _typeof2 = __webpack_require__(45);
+	var _typeof2 = __webpack_require__(46);
 	
 	var _typeof3 = _interopRequireDefault(_typeof2);
 	
@@ -2023,16 +2118,16 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _index = __webpack_require__(40);
+	var _index = __webpack_require__(41);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _marked = __webpack_require__(41);
+	var _marked = __webpack_require__(42);
 	
 	var _marked2 = _interopRequireDefault(_marked);
 	
@@ -2063,11 +2158,19 @@
 	  */
 			var baseURL = void 0;
 	
-			// if no baseURL was given, look in a fallback directory
-			if (!requestedBaseURL) {
-				baseURL = './repository/md/';
-			} else {
+			/**
+	   * Grab configuration items
+	   * First check to see if we have a configuration file and grab all the variables
+	   */
+			var readerConfigurationObject = _index2.default.init.conf();
+	
+			// If no baseURL was given, look in a fallback directory
+			if (!requestedBaseURL && readerConfigurationObject.baseURL === 'unknown') {
+				baseURL = '/bzzr:/';
+			} else if (requestedBaseURL) {
 				baseURL = requestedBaseURL;
+			} else if (readerConfigurationObject.baseURL !== 'unknown') {
+				baseURL = readerConfigurationObject.baseURL;
 			}
 	
 			/**
@@ -2099,27 +2202,47 @@
 							if (xhr.readyState === 4) {
 	
 								/**
-	        * Verify filetype in the URL to catch incorrect routes
-	        * Also check for illegal characters
+	        *
+	        * Verify URL to check for illegal characters
+	        * Verify content type to filter out HTML
 	        */
 	
+								// Check URL and render error if necessary
 								var urlVerification = _index2.default.verify.url(swarmFragment),
 								    validURL = urlVerification.validity,
-								    validityError = urlVerification.error;
+								    urlValidityError = urlVerification.error;
 	
-								// Render an error
 								if (!validURL) {
 									// Clear previous content
 									_index2.default.render.clearContent();
 	
 									// Render an error
-									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + validityError);
+									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + urlValidityError);
 	
 									document.title = 'Document error!';
 	
 									return;
 								}
 	
+								// Check content type to filter out HTML documents
+								// (mind that a 404 always returns an html document so filter)
+								var requestContentType = this.getResponseHeader('content-type'),
+								    contentTypeVerification = _index2.default.verify.contentType(requestContentType),
+								    validContentType = contentTypeVerification.validity;
+								//contentValidityError = contentTypeVerification.error;
+	
+								if (!validContentType && xhr.status != '404') {
+									/*								// Clear previous content
+	        								support.render.clearContent();
+	        
+	        								// Render an error
+	        								document.getElementById('app__error').innerHTML =
+	        								marked('# Oops! \n\n' + contentValidityError);
+	        
+	        								document.title = 'Document error!'; */
+	
+									return;
+								}
 								/**
 	         * Check if a document was grabbed or not, handle errors
 	         */
@@ -2149,7 +2272,8 @@
 						xhr.send();
 					})();
 				} else {
-					// Leave document empty
+					// If no request was made to a file, show the error text on the homepage
+					document.getElementById('app__error').className = 'errorText';
 					return;
 				}
 			};
@@ -2175,12 +2299,6 @@
 	module.exports = index;
 
 /***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(46), __esModule: true };
-
-/***/ },
 /* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -2190,15 +2308,21 @@
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = { "default": __webpack_require__(48), __esModule: true };
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _iterator = __webpack_require__(44);
+	var _iterator = __webpack_require__(45);
 	
 	var _iterator2 = _interopRequireDefault(_iterator);
 	
-	var _symbol = __webpack_require__(43);
+	var _symbol = __webpack_require__(44);
 	
 	var _symbol2 = _interopRequireDefault(_symbol);
 	
@@ -2213,25 +2337,25 @@
 	};
 
 /***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(71);
-	__webpack_require__(69);
-	__webpack_require__(72);
-	__webpack_require__(73);
-	module.exports = __webpack_require__(14).Symbol;
-
-/***/ },
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(72);
 	__webpack_require__(70);
+	__webpack_require__(73);
 	__webpack_require__(74);
-	module.exports = __webpack_require__(26).f('iterator');
+	module.exports = __webpack_require__(14).Symbol;
 
 /***/ },
 /* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(71);
+	__webpack_require__(75);
+	module.exports = __webpack_require__(26).f('iterator');
+
+/***/ },
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -2240,20 +2364,20 @@
 	};
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports) {
 
 	module.exports = function(){ /* empty */ };
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
 	var toIObject = __webpack_require__(3)
-	  , toLength  = __webpack_require__(66)
-	  , toIndex   = __webpack_require__(65);
+	  , toLength  = __webpack_require__(67)
+	  , toIndex   = __webpack_require__(66);
 	module.exports = function(IS_INCLUDES){
 	  return function($this, el, fromIndex){
 	    var O      = toIObject($this)
@@ -2272,11 +2396,11 @@
 	};
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(48);
+	var aFunction = __webpack_require__(49);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -2297,7 +2421,7 @@
 	};
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// all enumerable object keys, includes symbols
@@ -2317,13 +2441,13 @@
 	};
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1).document && document.documentElement;
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
@@ -2333,7 +2457,7 @@
 	};
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.2.2 IsArray(argument)
@@ -2343,7 +2467,7 @@
 	};
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2361,7 +2485,7 @@
 	};
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports) {
 
 	module.exports = function(done, value){
@@ -2369,7 +2493,7 @@
 	};
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getKeys   = __webpack_require__(11)
@@ -2384,7 +2508,7 @@
 	};
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var META     = __webpack_require__(13)('meta')
@@ -2442,7 +2566,7 @@
 	};
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var dP       = __webpack_require__(6)
@@ -2460,7 +2584,7 @@
 	};
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pIE            = __webpack_require__(19)
@@ -2481,7 +2605,7 @@
 	};
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
@@ -2506,12 +2630,12 @@
 
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 	var has         = __webpack_require__(2)
-	  , toObject    = __webpack_require__(67)
+	  , toObject    = __webpack_require__(68)
 	  , IE_PROTO    = __webpack_require__(21)('IE_PROTO')
 	  , ObjectProto = Object.prototype;
 	
@@ -2524,7 +2648,7 @@
 	};
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var toInteger = __webpack_require__(23)
@@ -2546,7 +2670,7 @@
 	};
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var toInteger = __webpack_require__(23)
@@ -2558,7 +2682,7 @@
 	};
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
@@ -2569,7 +2693,7 @@
 	};
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
@@ -2579,12 +2703,12 @@
 	};
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(49)
-	  , step             = __webpack_require__(57)
+	var addToUnscopables = __webpack_require__(50)
+	  , step             = __webpack_require__(58)
 	  , Iterators        = __webpack_require__(17)
 	  , toIObject        = __webpack_require__(3);
 	
@@ -2618,17 +2742,17 @@
 	addToUnscopables('entries');
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $at  = __webpack_require__(64)(true);
+	var $at  = __webpack_require__(65)(true);
 	
 	// 21.1.3.27 String.prototype[@@iterator]()
 	__webpack_require__(31)(String, 'String', function(iterated){
@@ -2646,7 +2770,7 @@
 	});
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2656,7 +2780,7 @@
 	  , DESCRIPTORS    = __webpack_require__(4)
 	  , $export        = __webpack_require__(29)
 	  , redefine       = __webpack_require__(36)
-	  , META           = __webpack_require__(59).KEY
+	  , META           = __webpack_require__(60).KEY
 	  , $fails         = __webpack_require__(9)
 	  , shared         = __webpack_require__(22)
 	  , setToStringTag = __webpack_require__(20)
@@ -2664,16 +2788,16 @@
 	  , wks            = __webpack_require__(7)
 	  , wksExt         = __webpack_require__(26)
 	  , wksDefine      = __webpack_require__(25)
-	  , keyOf          = __webpack_require__(58)
-	  , enumKeys       = __webpack_require__(52)
-	  , isArray        = __webpack_require__(55)
+	  , keyOf          = __webpack_require__(59)
+	  , enumKeys       = __webpack_require__(53)
+	  , isArray        = __webpack_require__(56)
 	  , anObject       = __webpack_require__(8)
 	  , toIObject      = __webpack_require__(3)
 	  , toPrimitive    = __webpack_require__(24)
 	  , createDesc     = __webpack_require__(12)
 	  , _create        = __webpack_require__(32)
-	  , gOPNExt        = __webpack_require__(62)
-	  , $GOPD          = __webpack_require__(61)
+	  , gOPNExt        = __webpack_require__(63)
+	  , $GOPD          = __webpack_require__(62)
 	  , $DP            = __webpack_require__(6)
 	  , $keys          = __webpack_require__(11)
 	  , gOPD           = $GOPD.f
@@ -2886,22 +3010,22 @@
 	setToStringTag(global.JSON, 'JSON', true);
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(25)('asyncIterator');
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(25)('observable');
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(68);
+	__webpack_require__(69);
 	var global        = __webpack_require__(1)
 	  , hide          = __webpack_require__(5)
 	  , Iterators     = __webpack_require__(17)
@@ -2916,7 +3040,7 @@
 	}
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

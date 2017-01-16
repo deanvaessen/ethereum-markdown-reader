@@ -5,12 +5,12 @@
 ### Outline ###
 * Application captures ``/#filename.md`` routes in the URL and navigates to the file. It knows a preconfigured URL-prefix to get the correct path.
 * Different 'fragments' or files can link to one another.
-* App does error handling for illegal characters/wrong filename syntax in the URL, also handles error when file cannot be found.
+* App does error handling for illegal characters, filters out HTML documents (this caused an issue whereby the page itself was loaded and rendered the doctype to the page) also handles error when file cannot be found.
 
 <br />
 ### Files ####
 * Source files in /code/dev/src/
-* Built, ready to go files in /code/dev/built/
+* Built, ready to go files in /code/build/dist/
 
 <br />
 Note that the built file *includes* the marked libary already inside, and has this minified within it in the minified version. This means the bundle is stand-alone and optimsed.
@@ -29,14 +29,14 @@ None beyond a webserver. The built file is located in ``/code/dist/dist`` and in
 
 <br />
 ### How do I run this? ###
-Get the Javascript, HMTL and CSS file from ``/code/build/dist/``. Run the HTML through a web server.
+Get the Javascript, HMTL, JSON configuration, and CSS file from ``/code/build/dist/``. Run the HTML through a web server.
 <br />
 
 **Notes**:
 <br />
-1. If you want to change the baseURL, you can do so on "build.js" in ``/code/build/dist`` on line 96 at the time of writing (or the equivalent in the minified file). This is at the point where it sets a baseURL if no baseURL is given when requiring the app (as you would if it is a module).
+1. If you want to change the baseURL, you can do so through ``readerConfiguration.json`` in ``/code/build/dist``. This JSON file can also be easily extended in the future if more variables are to be introduced. If the configuration file is not present, the app has a built in fallback to ``/bzzr:/``
 2. The index.html file also includes an extra error condition (users browsing to the app location and not a fragment).
-3. In case you want to extend this app further in the future, you can use the development set-up to import/require the markdownreader.js file in source and initiate the app as follows:
+3. In case you want to extend this app further in the future as a module of a larger framework, you can use the development set-up to import/require the markdownreader.js file in source and initiate the app as follows:
 <br />
 ``markdownReader.init('./repository/md/')``
 <br />
@@ -45,7 +45,7 @@ The argument it takes is the baseURL for the location of the files. If the user 
 
 <br />
 ### In-app Testing ###
-* Test suite available in code/dev/repository/md/testsuite.md (+other .md files). I have included tests and warnings for various issues (illegal characters, filetypes, etc.).
+* Test suite available in code/dev/repository/md/testsuite.md (+other .md files). I have included tests and warnings for various issues (illegal characters, missing files).
 
 <br />
 

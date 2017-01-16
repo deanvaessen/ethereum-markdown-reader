@@ -60,7 +60,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _marked = __webpack_require__(4);
+	var _marked = __webpack_require__(5);
 	
 	var _marked2 = _interopRequireDefault(_marked);
 	
@@ -91,11 +91,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  */
 			var baseURL = void 0;
 	
-			// if no baseURL was given, look in a fallback directory
-			if (!requestedBaseURL) {
-				baseURL = './repository/md/';
-			} else {
+			/**
+	   * Grab configuration items
+	   * First check to see if we have a configuration file and grab all the variables
+	   */
+			var readerConfigurationObject = _index2.default.init.conf();
+	
+			// If no baseURL was given, look in a fallback directory
+			if (!requestedBaseURL && readerConfigurationObject.baseURL === 'unknown') {
+				baseURL = '/bzzr:/';
+			} else if (requestedBaseURL) {
 				baseURL = requestedBaseURL;
+			} else if (readerConfigurationObject.baseURL !== 'unknown') {
+				baseURL = readerConfigurationObject.baseURL;
 			}
 	
 			/**
@@ -127,27 +135,47 @@ return /******/ (function(modules) { // webpackBootstrap
 							if (xhr.readyState === 4) {
 	
 								/**
-	        * Verify filetype in the URL to catch incorrect routes
-	        * Also check for illegal characters
+	        *
+	        * Verify URL to check for illegal characters
+	        * Verify content type to filter out HTML
 	        */
 	
+								// Check URL and render error if necessary
 								var urlVerification = _index2.default.verify.url(swarmFragment),
 								    validURL = urlVerification.validity,
-								    validityError = urlVerification.error;
+								    urlValidityError = urlVerification.error;
 	
-								// Render an error
 								if (!validURL) {
 									// Clear previous content
 									_index2.default.render.clearContent();
 	
 									// Render an error
-									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + validityError);
+									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + urlValidityError);
 	
 									document.title = 'Document error!';
 	
 									return;
 								}
 	
+								// Check content type to filter out HTML documents
+								// (mind that a 404 always returns an html document so filter)
+								var requestContentType = this.getResponseHeader('content-type'),
+								    contentTypeVerification = _index2.default.verify.contentType(requestContentType),
+								    validContentType = contentTypeVerification.validity;
+								//contentValidityError = contentTypeVerification.error;
+	
+								if (!validContentType && xhr.status != '404') {
+									/*								// Clear previous content
+	        								support.render.clearContent();
+	        
+	        								// Render an error
+	        								document.getElementById('app__error').innerHTML =
+	        								marked('# Oops! \n\n' + contentValidityError);
+	        
+	        								document.title = 'Document error!'; */
+	
+									return;
+								}
 								/**
 	         * Check if a document was grabbed or not, handle errors
 	         */
@@ -177,7 +205,8 @@ return /******/ (function(modules) { // webpackBootstrap
 						xhr.send();
 					})();
 				} else {
-					// Leave document empty
+					// If no request was made to a file, show the error text on the homepage
+					document.getElementById('app__error').className = 'errorText';
 					return;
 				}
 			};
@@ -208,11 +237,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	var _render = __webpack_require__(2);
+	var _init = __webpack_require__(2);
+	
+	var _init2 = _interopRequireDefault(_init);
+	
+	var _render = __webpack_require__(3);
 	
 	var _render2 = _interopRequireDefault(_render);
 	
-	var _verify = __webpack_require__(3);
+	var _verify = __webpack_require__(4);
 	
 	var _verify2 = _interopRequireDefault(_verify);
 	
@@ -221,15 +254,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	* { Function }
 	*/
-	/*******************************
-	 * [index.js]
-	 * Index file for the app's helpers
-	 ******************************/
-	
-	/**
-	* { Dependencies }
-	*/
 	var index = function () {
+	
+		/**
+	  * { Init }
+	  * Support helpers to run on init
+	  */
+		var init = {
+			conf: function conf() {
+				return _init2.default.conf();
+			}
+		};
 	
 		/**
 	 * { Render }
@@ -239,6 +274,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			renderDocumentTitle: function renderDocumentTitle(renderer, initialTitle) {
 				return _render2.default.add.renderDocumentTitle(renderer, initialTitle);
 			},
+	
 			clearContent: function clearContent() {
 				return _render2.default.remove.clearContent();
 			}
@@ -251,10 +287,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		var verify = {
 			url: function url(requestURL) {
 				return _verify2.default.url(requestURL);
+			},
+	
+			contentType: function contentType(requestContentType) {
+				return _verify2.default.contentType(requestContentType);
 			}
 		};
 	
 		return {
+			init: init,
 			render: render,
 			verify: verify
 		};
@@ -263,10 +304,91 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Export
 	 */
+	/*******************************
+	 * [index.js]
+	 * Index file for the app's helpers
+	 ******************************/
+	
+	/**
+	* { Dependencies }
+	*/
 	module.exports = index;
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/*******************************
+	 * [_init.js]
+	 * Helper function to run on init
+	 ******************************/
+	
+	/**
+	 * { Dependencies }
+	 */
+	
+	/**
+	* { Function }
+	*/
+	var index = function () {
+	
+		/**
+	  * { Conf }
+	  * Some initial configuration
+	  * Look for a JSON configuration file
+	 */
+		var conf = function conf(fragmentURL) {
+			var configurationFilePath = './readerConfiguration.json';
+	
+			var readerConfigurationObject = {
+				baseURL: 'unknown'
+			};
+	
+			/*eslint-disable */
+			var xhr = new XMLHttpRequest();
+			/*eslint-enable */
+	
+			xhr.onreadystatechange = function () {
+	
+				if (xhr.readyState === 4) {
+	
+					/**
+	      * Update readerConfigurationObject if we found the json file
+	      */
+					if (xhr.status == '404') {
+						// Do nothing
+					} else {
+						// Found the configuration file, so update it
+						var grabbedConfiguration = JSON.parse(xhr.responseText);
+	
+						if (grabbedConfiguration.configuration.baseURL) {
+							readerConfigurationObject.baseURL = grabbedConfiguration.configuration.baseURL;
+						}
+					}
+				}
+			};
+	
+			// Send request
+			xhr.open('GET', configurationFilePath, false);
+			xhr.send();
+	
+			return readerConfigurationObject;
+		};
+	
+		return {
+			conf: conf
+		};
+	}();
+	
+	/**
+	* Export
+	*/
+	module.exports = index;
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -317,6 +439,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			clearContent: function clearContent() {
 				document.getElementById('app__markdownContent').innerHTML = '';
 				document.getElementById('app__error').innerHTML = '';
+	
+				document.getElementById('app__error').className = 'errorText';
 			}
 		};
 	
@@ -332,7 +456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = index;
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -362,32 +486,32 @@ return /******/ (function(modules) { // webpackBootstrap
 			};
 	
 			// Verify the number of dots in the URL
-			var numberOfDotsInFragmentURL = (fragmentURL.match(/\./g) || []).length;
-	
-			if (numberOfDotsInFragmentURL < 1) {
-				urlVerification.error = 'No dot found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			} else if (numberOfDotsInFragmentURL > 1) {
-				urlVerification.error = 'Multiple dots found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
+			/*		const numberOfDotsInFragmentURL = (fragmentURL.match(/\./g) || []).length;
+	  
+	  		if (numberOfDotsInFragmentURL < 1) {
+	  			urlVerification.error = 'No dot found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		} else if (numberOfDotsInFragmentURL > 1) {
+	  			urlVerification.error = 'Multiple dots found in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}*/
 	
 			// Verify a file extention of "md" has been given
-			if (fragmentURL.indexOf('.md') == -1) {
-				urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
-	
-			if (fragmentURL.charAt(fragmentURL.indexOf('.md') + 3) != '') {
-				urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
-	
+			/*		if (fragmentURL.indexOf('.md') == -1) {
+	  			urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}
+	  
+	  		if ((fragmentURL.charAt(fragmentURL.indexOf('.md') + 3) != '')){
+	  			urlVerification.error = 'You gave an incorrect file extention. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}
+	  */
 			// Test for illegal characters
-			if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":,<>\?]/g.test(fragmentURL)) {
-				urlVerification.error = 'Illegal characters in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL + ')';
-				return urlVerification;
-			}
+			/*		if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":,<>\?]/g.test(fragmentURL)) {
+	  			urlVerification.error = 'Illegal characters in your file request URL. \n\n (Valid example: book1.md, your request: ' + fragmentURL +')';
+	  			return urlVerification;
+	  		}*/
 	
 			// All cleared, return result
 			urlVerification.validity = true;
@@ -395,8 +519,30 @@ return /******/ (function(modules) { // webpackBootstrap
 			return urlVerification;
 		};
 	
+		/**
+	  * { contentType }
+	  * Verify contentType
+	 */
+		var contentType = function contentType(requestContentType) {
+			var contentTypeVerification = {
+				validity: false,
+				error: 'You should never be seeing this error, please inform us'
+			};
+	
+			// Test for HTML content types
+			if (requestContentType.indexOf('text/html') != -1) {
+				contentTypeVerification.error = 'Oops, you tried to load an HTML document';
+				return contentTypeVerification;
+			}
+	
+			// All cleared, return result
+			contentTypeVerification.validity = true;
+			return contentTypeVerification;
+		};
+	
 		return {
-			url: url
+			url: url,
+			contentType: contentType
 		};
 	}();
 	
@@ -406,7 +552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = index;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {'use strict';
