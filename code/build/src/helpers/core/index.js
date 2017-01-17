@@ -20,8 +20,8 @@ const index = (function () {
 			 * Support helpers to run on init
 			 */
 			 const init = {
-			 	conf : function (){
-			 		return initHelpers.conf();
+			 	conf : function (callback){
+			 		return initHelpers.conf(callback);
 			 	}
 			 };
 

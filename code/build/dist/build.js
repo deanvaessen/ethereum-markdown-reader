@@ -95,127 +95,128 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Grab configuration items
 	   * First check to see if we have a configuration file and grab all the variables
 	   */
-			var readerConfigurationObject = _index2.default.init.conf();
+			_index2.default.init.conf(function (readerConfigurationObject) {
 	
-			// If no baseURL was given, look in a fallback directory
-			if (!requestedBaseURL && readerConfigurationObject.baseURL === 'unknown') {
-				baseURL = '/bzzr:/';
-			} else if (requestedBaseURL) {
-				baseURL = requestedBaseURL;
-			} else if (readerConfigurationObject.baseURL !== 'unknown') {
-				baseURL = readerConfigurationObject.baseURL;
-			}
-	
-			/**
-	   * { catch a fragmentRequest }
-	   * On change URL, try to render a document
-	   */
-			var fragmentRequest = function fragmentRequest() {
-	
-				if (window.location.hash) {
-					(function () {
-						var swarmFragment = window.location.hash.substring(1);
-	
-						/**
-	      * Set up the markdown render options
-	      */
-						var renderer = new _marked2.default.Renderer();
-	
-						/**
-	      * Grab a document and render it to the container
-	      */
-						var swarmDocumentPath = baseURL + swarmFragment;
-	
-						/*eslint-disable */
-						var xhr = new XMLHttpRequest();
-						/*eslint-enable */
-	
-						xhr.onreadystatechange = function () {
-	
-							if (xhr.readyState === 4) {
-	
-								/**
-	        *
-	        * Verify URL to check for illegal characters
-	        * Verify content type to filter out HTML
-	        */
-	
-								// Check URL and render error if necessary
-								var urlVerification = _index2.default.verify.url(swarmFragment),
-								    validURL = urlVerification.validity,
-								    urlValidityError = urlVerification.error;
-	
-								if (!validURL) {
-									// Clear previous content
-									_index2.default.render.clearContent();
-	
-									// Render an error
-									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + urlValidityError);
-	
-									document.title = 'Document error!';
-	
-									return;
-								}
-	
-								// Check content type to filter out HTML documents
-								// (mind that a 404 always returns an html document so filter)
-								var requestContentType = this.getResponseHeader('content-type'),
-								    contentTypeVerification = _index2.default.verify.contentType(requestContentType),
-								    validContentType = contentTypeVerification.validity;
-								//contentValidityError = contentTypeVerification.error;
-	
-								if (!validContentType && xhr.status != '404') {
-									/*								// Clear previous content
-	        								support.render.clearContent();
-	        
-	        								// Render an error
-	        								document.getElementById('app__error').innerHTML =
-	        								marked('# Oops! \n\n' + contentValidityError);
-	        
-	        								document.title = 'Document error!'; */
-	
-									return;
-								}
-								/**
-	         * Check if a document was grabbed or not, handle errors
-	         */
-								if (xhr.status == '404') {
-									// Clear previous content
-									_index2.default.render.clearContent();
-	
-									// Render an error
-									document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\nWe could not find this file.');
-	
-									document.title = 'File not found!';
-								} else {
-									// Clear previous content
-									_index2.default.render.clearContent();
-	
-									// Render document title with an initial title and search for new title
-									_index2.default.render.renderDocumentTitle(renderer, 'unnamed');
-	
-									// Render the document
-									document.getElementById('app__markdownContent').innerHTML = (0, _marked2.default)(xhr.responseText, { renderer: renderer });
-								}
-							}
-						};
-	
-						// Send request
-						xhr.open('GET', swarmDocumentPath, false);
-						xhr.send();
-					})();
-				} else {
-					// If no request was made to a file, show the error text on the homepage
-					document.getElementById('app__error').className = 'errorText';
-					return;
+				// If no baseURL was given, look in a fallback directory
+				if (!requestedBaseURL && readerConfigurationObject.baseURL === 'unknown') {
+					baseURL = '/bzzr:/';
+				} else if (requestedBaseURL) {
+					baseURL = requestedBaseURL;
+				} else if (readerConfigurationObject.baseURL !== 'unknown') {
+					baseURL = readerConfigurationObject.baseURL;
 				}
-			};
 	
-			// Set the fragmentChange function to run each time the window on hash event fires
-			window.onhashchange = fragmentRequest;
+				/**
+	    * { catch a fragmentRequest }
+	    * On change URL, try to render a document
+	    */
+				var fragmentRequest = function fragmentRequest() {
 	
-			// Run the function
-			fragmentRequest();
+					if (window.location.hash) {
+						(function () {
+							var swarmFragment = window.location.hash.substring(1);
+	
+							/**
+	       * Set up the markdown render options
+	       */
+							var renderer = new _marked2.default.Renderer();
+	
+							/**
+	       * Grab a document and render it to the container
+	       */
+							var swarmDocumentPath = baseURL + swarmFragment;
+	
+							/*eslint-disable */
+							var xhr = new XMLHttpRequest();
+							/*eslint-enable */
+	
+							xhr.onreadystatechange = function () {
+	
+								if (xhr.readyState === 4) {
+	
+									/**
+	         *
+	         * Verify URL to check for illegal characters
+	         * Verify content type to filter out HTML
+	         */
+	
+									// Check URL and render error if necessary
+									var urlVerification = _index2.default.verify.url(swarmFragment),
+									    validURL = urlVerification.validity,
+									    urlValidityError = urlVerification.error;
+	
+									if (!validURL) {
+										// Clear previous content
+										_index2.default.render.clearContent();
+	
+										// Render an error
+										document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\n' + urlValidityError);
+	
+										document.title = 'Document error!';
+	
+										return;
+									}
+	
+									// Check content type to filter out HTML documents
+									// (mind that a 404 always returns an html document so filter)
+									var requestContentType = this.getResponseHeader('content-type'),
+									    contentTypeVerification = _index2.default.verify.contentType(requestContentType),
+									    validContentType = contentTypeVerification.validity;
+									//contentValidityError = contentTypeVerification.error;
+	
+									if (!validContentType && xhr.status != '404') {
+										/*								// Clear previous content
+	         								support.render.clearContent();
+	         
+	         								// Render an error
+	         								document.getElementById('app__error').innerHTML =
+	         								marked('# Oops! \n\n' + contentValidityError);
+	         
+	         								document.title = 'Document error!'; */
+	
+										return;
+									}
+									/**
+	          * Check if a document was grabbed or not, handle errors
+	          */
+									if (xhr.status == '404') {
+										// Clear previous content
+										_index2.default.render.clearContent();
+	
+										// Render an error
+										document.getElementById('app__error').innerHTML = (0, _marked2.default)('# Oops! \n\nWe could not find this file.');
+	
+										document.title = 'File not found!';
+									} else {
+										// Clear previous content
+										_index2.default.render.clearContent();
+	
+										// Render document title with an initial title and search for new title
+										_index2.default.render.renderDocumentTitle(renderer, 'unnamed');
+	
+										// Render the document
+										document.getElementById('app__markdownContent').innerHTML = (0, _marked2.default)(xhr.responseText, { renderer: renderer });
+									}
+								}
+							};
+	
+							// Send request
+							xhr.open('GET', swarmDocumentPath, true);
+							xhr.send();
+						})();
+					} else {
+						// If no request was made to a file, show the error text on the homepage
+						document.getElementById('app__error').className = 'errorText';
+						return;
+					}
+				};
+	
+				// Set the fragmentChange function to run each time the window on hash event fires
+				window.onhashchange = fragmentRequest;
+	
+				// Run the function
+				fragmentRequest();
+			});
 		}();
 	
 		return {
@@ -261,8 +262,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * Support helpers to run on init
 	  */
 		var init = {
-			conf: function conf() {
-				return _init2.default.conf();
+			conf: function conf(callback) {
+				return _init2.default.conf(callback);
 			}
 		};
 	
@@ -339,7 +340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * Some initial configuration
 	  * Look for a JSON configuration file
 	 */
-		var conf = function conf(fragmentURL) {
+		var conf = function conf(callback) {
 			var configurationFilePath = './readerConfiguration.json';
 	
 			var readerConfigurationObject = {
@@ -358,23 +359,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * Update readerConfigurationObject if we found the json file
 	      */
 					if (xhr.status == '404') {
-						// Do nothing
+						// Run the application with default values
+						callback();
 					} else {
-						// Found the configuration file, so update it
+						// Found the configuration file, so update our configuration variables
 						var grabbedConfiguration = JSON.parse(xhr.responseText);
 	
 						if (grabbedConfiguration.configuration.baseURL) {
 							readerConfigurationObject.baseURL = grabbedConfiguration.configuration.baseURL;
 						}
+	
+						callback(readerConfigurationObject);
 					}
 				}
 			};
 	
 			// Send request
-			xhr.open('GET', configurationFilePath, false);
+			xhr.open('GET', configurationFilePath, true);
 			xhr.send();
-	
-			return readerConfigurationObject;
 		};
 	
 		return {

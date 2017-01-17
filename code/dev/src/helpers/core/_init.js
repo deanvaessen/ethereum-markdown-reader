@@ -17,7 +17,7 @@
 	 * Some initial configuration
 	 * Look for a JSON configuration file
 	*/
-	const conf = function (fragmentURL) {
+	const conf = function (callback) {
 		const configurationFilePath = './readerConfiguration.json';
 
 		let readerConfigurationObject = {
@@ -36,23 +36,24 @@
 				  * Update readerConfigurationObject if we found the json file
 				  */
 				if (xhr.status == '404') {
-					// Do nothing
+					// Run the application with default values
+					callback();
 				} else {
-					// Found the configuration file, so update it
+					// Found the configuration file, so update our configuration variables
 					const grabbedConfiguration = JSON.parse(xhr.responseText);
 
 					if (grabbedConfiguration.configuration.baseURL) {
 						readerConfigurationObject.baseURL = grabbedConfiguration.configuration.baseURL;
 					}
+
+					callback(readerConfigurationObject);
 				}
 			}
 		};
 
 		// Send request
-		xhr.open('GET', configurationFilePath, false);
+		xhr.open('GET', configurationFilePath, true);
 		xhr.send();
-
-		return readerConfigurationObject;
 	}
 
 	return {
