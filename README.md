@@ -22,7 +22,7 @@ Note that the built file *includes* the marked libary already inside, and has th
 <br />
 ### Runtime requirements ###
 <br />
-None beyond a webserver. The built file is located in ``/code/dist/dist`` and includes:
+None beyond a webserver. The built file is located in ``/code/build/dist`` and includes:
 - Javascript files (+maps). 1 minified, one non-minified.
 - HTML document
 - CSS stylesheet
